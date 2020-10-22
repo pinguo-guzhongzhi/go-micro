@@ -10,7 +10,18 @@ import (
 
 //go:generate protoc -I. --go_out=paths=source_relative:. errors.proto
 
+type ErrorFormatter func(*Error) string
+
+var errorFormatter ErrorFormatter
+
+func SetErrorFormatter(fn ErrorFormatter) {
+	errorFormatter = fn
+}
+
 func (e *Error) Error() string {
+	if errorFormatter != nil {
+		return errorFormatter(e)
+	}
 	b, _ := json.Marshal(e)
 	return string(b)
 }
