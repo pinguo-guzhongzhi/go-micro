@@ -18,11 +18,11 @@ func SetErrorFormatter(fn ErrorFormatter) {
 	errorFormatter = fn
 }
 
-func (e *Error) Error() string {
+func (m *Error) Error() string {
 	if errorFormatter != nil {
-		return errorFormatter(e)
+		return errorFormatter(m)
 	}
-	b, _ := json.Marshal(e)
+	b, _ := json.Marshal(m)
 	return string(b)
 }
 
